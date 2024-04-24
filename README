@@ -1,0 +1,24 @@
+
+For Kazuumi (remove the .so files before RE-building in step 2!) :
+
+# cmake -Bbuild -H. -DCMAKE_TOOLCHAIN_FILE=./default_toolchain.cmake -DCMAKE_INSTALL_PREFIX=./install
+# cmake --build build --parallel 2
+# cd build
+# srun --overlap --mpi=pmix -n 1 ctest -VV
+
+Set the proper PATHs:
+
+#
+#
+#
+
+Rename the module .so file
+
+# cd build
+# cp libvenus_nwchemex_plugin.so venus_nwchemex_plugin.so
+
+Testing:
+
+# cd build
+# srun --overlap --mpi=pmix -n 1 python test.py
+
