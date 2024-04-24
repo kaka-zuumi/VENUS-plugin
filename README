@@ -22,3 +22,9 @@ Testing:
 # cd build
 # srun --overlap --mpi=pmix -n 1 python test.py
 
+
+
+Together:
+# rm build/libvenus_nwchemex_plugin.so.0 build/libvenus_nwchemex_plugin.so build/venus_nwchemex_plugin.so; cmake --build build --parallel 2
+# cd build; cp libvenus_nwchemex_plugin.so venus_nwchemex_plugin.so; cd ..; srun --overlap --mpi=pmix -n 1 python test.py 
+

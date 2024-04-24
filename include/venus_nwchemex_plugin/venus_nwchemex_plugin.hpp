@@ -8,6 +8,7 @@
 #include <pluginplay/property_type/property_type.hpp>
 //#include <simde/simde.hpp>
 #include <simde/types.hpp>
+#include <chemist/chemist.hpp>
 
 #include "venus_nwchemex_plugin_mm.hpp"
 
@@ -25,6 +26,8 @@ using python_class_type = pybind11::class_<Args...>;
 
 // Kazuumi note end
 
+using chemical_system = chemist::ChemicalSystem;
+
 /** @brief The property type for modules that compute the total energy of a
  *         chemical system.
  *
@@ -37,17 +40,17 @@ DECLARE_PROPERTY_TYPE(UnimolecularSamplingPT);
 
 //-------------------------------Implementations--------------------------------
 PROPERTY_TYPE_INPUTS(UnimolecularSamplingPT) {
-    using chem_sys_t = const simde::type::chemical_system&;
-    auto rv = pluginplay::declare_input();
-    rv.add_field<chem_sys_t>("Chemical System");
+    using chem_sys_t = const chemist::ChemicalSystem&;
+    auto rv = pluginplay::declare_input().add_field<chem_sys_t>("Chemical System");
     rv["Chemical System"].set_description("The chemical system");
     return rv;
 }
 
 PROPERTY_TYPE_RESULTS(UnimolecularSamplingPT) {
-    auto rv = pluginplay::declare_result();
-    rv.add_field<simde::type::chemical_system>("Sampled Chemical System");
-    rv.add_field<chemist::PointSet<double>>("Sampled Momenta");
+//  auto rv = pluginplay::declare_result().add_field<chemist::ChemicalSystem>("Sampled Chemical System").add_field<chemist::PointSet<double>>("Sampled Momenta");
+    using chem_sys_t = chemist::ChemicalSystem;
+    using momenta_t = chemist::PointSet<double>;
+    auto rv = pluginplay::declare_result().add_field<chem_sys_t>("Sampled Chemical System").template add_field<momenta_t>("Sampled Momenta");
     rv["Sampled Chemical System"].set_description("The chemical system from a sampling's distribution");
     rv["Sampled Momenta"].set_description("The corresponding momenta of this chemical system");
     return rv;
