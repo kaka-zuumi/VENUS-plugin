@@ -1,16 +1,34 @@
 
+For Kazuumi, add the proper modules from the build script in the parent folder and set up the proper PATHs!
+
+module purge
+module load compiler/GCCcore/11.3.0
+module load mpi/OpenMPI/4.1.4-GCC-11.3.0
+module load numlib/OpenBLAS/0.3.20-GCC-11.3.0
+module load lang/Python/3.10.4-GCCcore-11.3.0
+module load devel/Boost/1.79.0-GCC-11.3.0
+module load devel/CMake/3.24.3-GCCcore-11.3.0
+
+nwchemexDIR=/mnt/lustre/koa/koastore/rsun_group/kazuumiTest1/nwchemexTEST1/nwchemex_gcc_gccNWC_automated_noprovisional_try1
+venusDIR=/mnt/lustre/koa/koastore/rsun_group/kazuumiTest1/nwchemexTEST1/nwchemex_gcc_gccNWC_automated_noprovisional_try1/VENUSplugin1/venus_nwchemex_plugin/build
+
+export PYTHONPATH="$PYTHONPATH:$nwchemexDIR/NWChemEx-modules"
+export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$nwchemexDIR/NWChemEx-install/lib64"
+while read dir; do
+  echo "Adding $dir to LD_LIBRARY_PATH..."
+  export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$dir"
+done < <(ls -d $nwchemexDIR/NWChemEx-install/lib64/*/ | sed 's|/$||')
+
+export PYTHONPATH="$PYTHONPATH:$venusDIR"
+
+
+
 For Kazuumi (remove the .so files before RE-building in step 2!) :
 
 # cmake -Bbuild -H. -DCMAKE_TOOLCHAIN_FILE=./default_toolchain.cmake -DCMAKE_INSTALL_PREFIX=./install
 # cmake --build build --parallel 2
 # cd build
 # srun --overlap --mpi=pmix -n 1 ctest -VV
-
-Set the proper PATHs:
-
-#
-#
-#
 
 Rename the module .so file
 

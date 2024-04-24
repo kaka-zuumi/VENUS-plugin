@@ -5,9 +5,11 @@
 
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
-#include <pluginplay/property_type/property_type.hpp>
+#include <pluginplay/pluginplay.hpp>
+//#include <pluginplay/property_type/property_type.hpp>
+//#include <pluginplay/property_type/property_type_impl.hpp>
 //#include <simde/simde.hpp>
-#include <simde/types.hpp>
+//#include <simde/types.hpp>
 #include <chemist/chemist.hpp>
 
 #include "venus_nwchemex_plugin_mm.hpp"
@@ -26,7 +28,6 @@ using python_class_type = pybind11::class_<Args...>;
 
 // Kazuumi note end
 
-using chemical_system = chemist::ChemicalSystem;
 
 /** @brief The property type for modules that compute the total energy of a
  *         chemical system.
