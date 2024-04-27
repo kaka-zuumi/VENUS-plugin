@@ -1264,8 +1264,8 @@ class bimolecularSampling(pp.ModuleBase):
 
         sampled_sysA = dynamicChemicalSystem(sampled_molA); sampled_sysA.centerMolecule()
         sampled_sysB = dynamicChemicalSystem(sampled_molB); sampled_sysB.centerMolecule()
-        sampled_sysA.set_momenta(np.array([[point.x,point.y,point.z] for point in sampled_sysA]))
-        sampled_sysB.set_momenta(np.array([[point.x,point.y,point.z] for point in sampled_sysB]))
+        sampled_sysA.set_momenta(np.array([[point.x,point.y,point.z] for point in sampled_pA]))
+        sampled_sysB.set_momenta(np.array([[point.x,point.y,point.z] for point in sampled_pB]))
 #       sampled_sysA.set_momenta(np.array(sampled_pA).reshape(-1,3))
 #       sampled_sysB.set_momenta(np.array(sampled_pB).reshape(-1,3))
 
