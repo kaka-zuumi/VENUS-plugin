@@ -1262,12 +1262,16 @@ class bimolecularSampling(pp.ModuleBase):
         sampled_molA, sampled_pA = samplingMODa.run_as(UnimolecularSamplingPT(), molA0)
         sampled_molB, sampled_pB = samplingMODb.run_as(UnimolecularSamplingPT(), molB0)
 
-        sampled_sysA = dynamicChemicalSystem(sampled_molA); sampled_sysA.centerMolecule()
-        sampled_sysB = dynamicChemicalSystem(sampled_molB); sampled_sysB.centerMolecule()
-        sampled_sysA.set_momenta(np.array([[point.x,point.y,point.z] for point in sampled_pA]))
-        sampled_sysB.set_momenta(np.array([[point.x,point.y,point.z] for point in sampled_pB]))
-#       sampled_sysA.set_momenta(np.array(sampled_pA).reshape(-1,3))
-#       sampled_sysB.set_momenta(np.array(sampled_pB).reshape(-1,3))
+        pA = []; pB = []
+        for i in range(sampled_molA.molecule.size):
+            pi = sampled_pA.at(i)
+            pA.append([pi.x,pi.y,pi.z])
+        for i in range(sampled_molA.molecule.size):
+            pi = sampled_pB.at(i)
+            pB.append([pi.x,pi.y,pi.z])
+
+        sampled_sysA = dynamicChemicalSystem(sampled_molA,momenta=np.array(pA)); sampled_sysA.centerMolecule()
+        sampled_sysB = dynamicChemicalSystem(sampled_molB,momenta=np.array(pB)); sampled_sysB.centerMolecule()
 
         massA = sum(sampled_sysA.masses)
         massB = sum(sampled_sysB.masses)
