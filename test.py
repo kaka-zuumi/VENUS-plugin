@@ -1263,10 +1263,10 @@ class bimolecularSampling(pp.ModuleBase):
         sampled_molB, sampled_pB = samplingMODb.run_as(UnimolecularSamplingPT(), molB0)
 
         pA = []; pB = []
-        for i in range(sampled_molA.molecule.size):
+        for i in range(sampled_molA.molecule.size()):
             pi = sampled_pA.at(i)
             pA.append([pi.x,pi.y,pi.z])
-        for i in range(sampled_molA.molecule.size):
+        for i in range(sampled_molA.molecule.size()):
             pi = sampled_pB.at(i)
             pB.append([pi.x,pi.y,pi.z])
 
@@ -1554,9 +1554,6 @@ class vibrationalQuantaThermalSampling(pp.ModuleBase):
 
 
 def main():
-    mm = pp.ModuleManager()
-#   nwchemex.load_modules(mm)
-
     n_threads = 6
     mpiexec_command = "srun --overlap --mpi=pmix --nodes={nnodes} --ntasks-per-node={ranks_per_node} --ntasks={total_ranks} --cpus-per-task={cores_per_rank}" # For QCEngine, it has to be of this format: (1) nodes, (2) ranks_per_node, (3) total_ranks, (4) cores_per_rank
     MPIconfig = {
@@ -1582,6 +1579,8 @@ def main():
     samplingIP = "fixed"
 
     ###################################################################################
+
+    mm = pp.ModuleManager()
 
     # Load the PES
 
@@ -1659,6 +1658,9 @@ def main():
         mm.change_input(module_key, 'vibrational sample', vSampleA)
         mm.at(module_key).turn_off_memoization()
 
+    else:
+        raise ValueError("In unimolecular sampling A .... only 'thermal' or 'semiclassical' (for diatoms) sampling is allowed for now")
+
 
     if (samplingB == "thermal"):
         module_key="VENUS : nonlinear molecule angular momentum thermal sampling B"
@@ -1698,12 +1700,30 @@ def main():
         mm.change_input(module_key, 'vibrational sample', vSampleB)
         mm.at(module_key).turn_off_memoization()
 
+    else:
+        raise ValueError("In unimolecular sampling B .... only 'thermal' or 'semiclassical' (for diatoms) sampling is allowed for now")
+
 
     if (samplingIP == "fixed"):
         module_key="VENUS : impact parameter sampling"
         mm.add_module(module_key, fixedImpactParameterSampling())
         mm.change_input(module_key, 'maximum impact parameter', bmax)
         mm.at(module_key).turn_off_memoization()
+
+    elif (samplingIP == "uniform"):
+        module_key="VENUS : impact parameter sampling"
+        mm.add_module(module_key, uniformImpactParameterSampling())
+        mm.change_input(module_key, 'maximum impact parameter', bmax)
+        mm.at(module_key).turn_off_memoization()
+
+    elif (samplingIP == "linear"):
+        module_key="VENUS : impact parameter sampling"
+        mm.add_module(module_key, linearImpactParameterSampling())
+        mm.change_input(module_key, 'maximum impact parameter', bmax)
+        mm.at(module_key).turn_off_memoization()
+
+    else:
+        raise ValueError("In the impact parameter sampling, only 'fixed', 'uniform', or 'linear' is allowed for now")
 
     ###################################################################################
 
