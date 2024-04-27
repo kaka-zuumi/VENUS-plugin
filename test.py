@@ -304,7 +304,7 @@ class dynamicChemicalSystem:
         self.positions = np.array(self.positions)
 
         # Set the momenta (and velocities)
-        if (not momenta is None):
+        if (momenta is None):
             momenta = np.zeros((self.Natoms,3))
         self.velocities = np.zeros((self.Natoms,3))
         self.set_momenta(momenta)
