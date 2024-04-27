@@ -304,7 +304,7 @@ class dynamicChemicalSystem:
         self.positions = np.array(self.positions)
 
         # Set the momenta (and velocities)
-        if (not momenta):
+        if (not momenta is None):
             momenta = np.zeros((self.Natoms,3))
         self.velocities = np.zeros((self.Natoms,3))
         self.set_momenta(momenta)
@@ -1266,7 +1266,7 @@ class bimolecularSampling(pp.ModuleBase):
         for i in range(sampled_molA.molecule.size()):
             pi = sampled_pA.at(i)
             pA.append([pi.x,pi.y,pi.z])
-        for i in range(sampled_molA.molecule.size()):
+        for i in range(sampled_molB.molecule.size()):
             pi = sampled_pB.at(i)
             pB.append([pi.x,pi.y,pi.z])
 
